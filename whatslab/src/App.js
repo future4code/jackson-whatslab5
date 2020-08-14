@@ -1,17 +1,5 @@
 import React from 'react';
-import styled from "styled-components"
-
-
-const QuadroBorda = styled.section `
-margin-left: 28vw;
-margin-right: 25vw;
-border: solid;
-height: 98vh; 
-width: 40vw;
-background-color: #dcf8c6;
-display:flex;
-align-items: flex-end;
-`
+import styled from 'styled-components'
 
 const InputMensagem = styled.input `
 width: 20vw; 
@@ -27,38 +15,100 @@ height: 4vh;
 background-color: #075e54;
 color: white;` 
 
+const ContainerGeral = styled.div `
+height: 100vh;
+width: 40vw;
+border: 1px solid black;
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+margin-left: 28vw;
+background-color: #dcf8c6;` 
 
 
-function App() {
-  return (
-    <div>
 
-      <QuadroBorda>
+class App extends React.Component {
 
-     <div>
-      <InputUsuario
-         
-         value={""}
-         onChange={""}
-         placeholder={"Nome do Usario"} />
-      <InputMensagem
-        
-         value={""}
-         onChange={""}
-         placeholder={"Digite uma mensagem"} />
-
-      <BotaoEnviar>Enviar</BotaoEnviar>
-
-      </div>
+state = {
+  mensagem: [{
+    nome: "",
+    conteudo: ""
+  }],
+  valorInputUsuario: "",
+  valorInputMensagem: ""
+}
 
 
-      </QuadroBorda>
-  
-    </div>
-  );
+onChangeUsuario = (event) => {
+this.setState({
+  valorInputUsuario: event.target.value
+})
+
+
+} 
+
+onChangeMensagem = (event) => {
+  this.setState({
+    valorInputMensagem: event.target.value
+  })
+
+}
+
+mandarMensagem = () => {
+
+  const novaMensagem = {
+    nome: this.state.valorInputUsuario + ":",
+    conteudo: this.state.valorInputMensagem
+  }
+
+  const novoArrayMsg = [...this.state.mensagem, novaMensagem]
+
+  this.setState({
+    mensagem: novoArrayMsg,
+    valorInputUsuario: "",
+    valorInputMensagem: ""
+  })
+
 }
 
 
 
+  render() {
+
+  const listaMensagem = this.state.mensagem.map((msg) => {
+
+    return (
+      <div>
+        <p>{msg.nome} {msg.conteudo}</p>
+      </div>
+    )
+  })
+
+
+
+
+
+
+  return (
+
+    <ContainerGeral>{listaMensagem}
+    <div>
+    <InputUsuario
+         
+              value={this.state.valorInputUsuario}
+              onChange={this.onChangeUsuario}
+              placeholder={"Nome do Usuario"} />
+           <InputMensagem
+             
+              value={this.state.valorInputMensagem}
+              onChange={this.onChangeMensagem}
+              placeholder={"Digite uma mensagem"} />
+     
+           <BotaoEnviar onClick={this.mandarMensagem} type="submit">Enviar</BotaoEnviar>
+           </div>
+    </ContainerGeral>
+  );
+  }
+}
 
 export default App;
